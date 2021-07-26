@@ -5,6 +5,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Image\SQLDB.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Image\SQLDB.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="RepoDb" Version="1.12.7" />
 		<PackageReference Include="RepoDb.MySql" Version="1.1.4" />
@@ -21,12 +31,19 @@
 
 	<PropertyGroup>
 		<VsxmdAutoDeleteXml>True</VsxmdAutoDeleteXml>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+		<Description>An extension of SQL Style of Database, SQL Server, PostgreSQL &amp; MySQL</Description>
+		<RepositoryUrl>https://github.com/fireloudapp/FC.Extension.SQL</RepositoryUrl>
 	</PropertyGroup>
-	
+
 	<ItemGroup>
-	  <Folder Include="MySQL\" />
-	  <Folder Include="SQLite\" />
-	  <Folder Include="SQLServer\" />
+		<None Include="Image\SQLDB.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
