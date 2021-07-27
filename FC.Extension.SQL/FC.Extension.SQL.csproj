@@ -35,8 +35,11 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-		<Description>An extension of SQL Style of Database, SQL Server, PostgreSQL &amp; MySQL</Description>
+		<Description>An extension of SQL Style of Database, SQL Server, PostgreSQL, SQLite &amp; MySQL</Description>
 		<RepositoryUrl>https://github.com/fireloudapp/FC.Extension.SQL</RepositoryUrl>
+		<PackageProjectUrl>https://sr-firecloud.gitbook.io/fc-extension/sql/sql-extension</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>sql</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
