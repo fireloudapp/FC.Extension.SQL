@@ -30,10 +30,12 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
                  .RuleFor(o => o.Name, f => f.Person.FullName)
                  .RuleFor(o => o.Email, f => f.Person.Email);
             var person = personFake.Generate();
-            SQLExtension.SQLConfig = new SQLExecutionConfig()
-            { Compiler = SQLCompiler.PostgreSQL, 
-                ConnectionString = "User Id=FCPos;Password=System@1234;Server=localhost;Port=5432;Database=ExtensionTest;", 
-                Trace = null };
+            SQLExtension.SQLConfig = new SQLConfig()
+            {
+                Compiler = SQLCompiler.PostgreSQL,
+                ConnectionString = "User Id=FCPos;Password=System@1234;Server=localhost;Port=5432;Database=ExtensionTest;",
+                Trace = null
+            };
             if (IsSave)
             {
                 person = person.Save().Result;
