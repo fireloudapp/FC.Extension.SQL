@@ -39,6 +39,8 @@
 		<PackageProjectUrl>https://sr-firecloud.gitbook.io/fc-extension/sql/sql-extension</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>sql</PackageTags>
+		<Description>An extension of SQL Style of Database, SQL Server, PostgreSQL &amp; MySQL</Description>
+		<RepositoryUrl>https://github.com/fireloudapp/FC.Extension.S>>>>>>> de9cdcc437722a20cef9aaf1efb165d79fedb12e
 	</PropertyGroup>
 
 	<ItemGroup>
