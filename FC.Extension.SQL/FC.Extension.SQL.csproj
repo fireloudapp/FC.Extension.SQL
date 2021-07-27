@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Image\SQLDB.png" />
+    <PackageReference Include="SqlKata" Version="2.3.7" />
   </ItemGroup>
 
+<<<<<<< Updated upstream
   <ItemGroup>
     <EmbeddedResource Include="Image\SQLDB.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -46,4 +47,6 @@
 		</None>
 	</ItemGroup>
 
+=======
+>>>>>>> Stashed changes
 </Project>
