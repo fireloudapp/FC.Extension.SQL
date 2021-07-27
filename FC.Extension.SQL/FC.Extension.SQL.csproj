@@ -3,10 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://sr-firecloud.gitbook.io/fc-extension/sql/sql-extension</PackageProjectUrl>
+    <Description>An extension of SQL Style of Database, SQL Server, PostgreSQL, SQLite &amp; MySQL.</Description>
+    <RepositoryUrl>https://github.com/fireloudapp/FC.Extension.SQL</RepositoryUrl>
+    <PackageTags>SQL</PackageTags>
+	<PackageIcon>SQLDB.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="SqlKata" Version="2.3.7" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Include="Image\SQLDB.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>
