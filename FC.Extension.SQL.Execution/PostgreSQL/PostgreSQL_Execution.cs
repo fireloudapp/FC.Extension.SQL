@@ -2,14 +2,22 @@
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using FC.Core.Extension.StringHandlers;
-using FC.Extension.SQL.Helper;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using FC.Core.Extension.StringHandlers;
+using FC.Extension.SQL;
+using FC.Extension.SQL.Helper;
+using FC.Extension.SQL.Engine;
 
-namespace FC.Extension.SQL.Execution
+namespace FC.Extension.SQL.Execution.PostgreSQL
 {
+    /// <summary>
+    /// Consume this by typing the command ' .\FC.Extension.SQL.Execution.exe PostgreSQL -h'
+    /// </summary>
     [Command("PostgreSQL")]
-    public class PostgreSQLInsert_Execution : ICommand
+    public class PostgreSQL_Execution : ICommand
     {
         [CommandOption("Save", 's', Description = "Save a Person")]
         public bool IsSave { get; set; }
@@ -20,10 +28,12 @@ namespace FC.Extension.SQL.Execution
         [CommandOption("Delete", 'd', Description = "Delete a Person")]
         public bool IsDelete { get; set; }
 
+        [CommandOption("GetById", 'i', Description = "Get a Person by Id")]
+        public bool IsGetById { get; set; }
         public ValueTask ExecuteAsync(IConsole console)
         {
             var personFake = new Faker<Person>()
-                 .RuleFor(o => o.Name, f => f.Person.FullName)
+                 .RuleFor(o => o.Name, f => f.Person.FirstName)
                  .RuleFor(o => o.Email, f => f.Person.Email);
             var person = personFake.Generate();
             SQLExtension.SQLConfig = new SQLConfig()
@@ -39,18 +49,37 @@ namespace FC.Extension.SQL.Execution
             }
             else if (IsUpdate)
             {
-                person.Id = 1;
+                person.Id = GetIdEntry();
                 person = person.Update().Result;
                 console.Output.WriteLine($"Object Updated : {person.ToJSON<Person>()}");
             }
             else if (IsDelete)
             {
-                person.Id = 1;
+                person.Id = GetIdEntry();
                 int records = person.Delete(person.Id).Result;
                 console.Output.WriteLine($"Deleted. No of Records : {records}");
+            }
+            else if (IsGetById)
+            {
+                person.Id = GetIdEntry();
+                Person per = person.Get(person.Id).Result;
+                console.Output.WriteLine($"Received Object : {per.ToJSON()}");
             }
 
             return default;
         }
+        /// <summary>
+        /// Get the Id by key entry
+        /// </summary>
+        /// <returns></returns>
+        public int GetIdEntry()
+        {
+            Console.WriteLine("Enter Person unique Id :");
+            int id = int.Parse(Console.ReadLine().ToString());
+            return id;  
+        }
     }
+
+
+    
 }
