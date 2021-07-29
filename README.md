@@ -1,273 +1,139 @@
-<a name='assembly'></a>
 # FC.Extension.SQL
 
-## Contents
 
-- [BaseTrace](#T-FC-Extension-SQL-Helper-BaseTrace 'FC.Extension.SQL.Helper.BaseTrace')
-- [DeleteHandler](#T-FC-Extension-SQL-Engine-DeleteHandler 'FC.Extension.SQL.Engine.DeleteHandler')
-  - [Delete\`\`1(model,id)](#M-FC-Extension-SQL-Engine-DeleteHandler-Delete``1-``0,System-Object- 'FC.Extension.SQL.Engine.DeleteHandler.Delete``1(``0,System.Object)')
-- [GetAllHandler](#T-FC-Extension-SQL-Engine-GetAllHandler 'FC.Extension.SQL.Engine.GetAllHandler')
-  - [GetAll\`\`1(model)](#M-FC-Extension-SQL-Engine-GetAllHandler-GetAll``1-``0- 'FC.Extension.SQL.Engine.GetAllHandler.GetAll``1(``0)')
-- [GetAnyHandler](#T-FC-Extension-SQL-Engine-GetAnyHandler 'FC.Extension.SQL.Engine.GetAnyHandler')
-  - [GetAny\`\`1(model,query)](#M-FC-Extension-SQL-Engine-GetAnyHandler-GetAny``1-``0,SqlKata-Query- 'FC.Extension.SQL.Engine.GetAnyHandler.GetAny``1(``0,SqlKata.Query)')
-- [GetByIdHandler](#T-FC-Extension-SQL-Engine-GetByIdHandler 'FC.Extension.SQL.Engine.GetByIdHandler')
-  - [Get\`\`1(model,id)](#M-FC-Extension-SQL-Engine-GetByIdHandler-Get``1-``0,System-Object- 'FC.Extension.SQL.Engine.GetByIdHandler.Get``1(``0,System.Object)')
-- [MySQLDataAccess\`1](#T-FC-Extension-SQL-MySQL-MySQLDataAccess`1 'FC.Extension.SQL.MySQL.MySQLDataAccess`1')
-- [PostgreSQLDataAccess\`1](#T-FC-Extension-SQL-PostgreSQL-PostgreSQLDataAccess`1 'FC.Extension.SQL.PostgreSQL.PostgreSQLDataAccess`1')
-- [SQLiteDataAccess\`1](#T-FC-Extension-SQL-SQLServer-SQLiteDataAccess`1 'FC.Extension.SQL.SQLServer.SQLiteDataAccess`1')
-- [SQServerDataAccess\`1](#T-FC-Extension-SQL-SQLServer-SQServerDataAccess`1 'FC.Extension.SQL.SQLServer.SQServerDataAccess`1')
-- [SaveHandler](#T-FC-Extension-SQL-Engine-SaveHandler 'FC.Extension.SQL.Engine.SaveHandler')
-  - [Save\`\`1(model)](#M-FC-Extension-SQL-Engine-SaveHandler-Save``1-``0- 'FC.Extension.SQL.Engine.SaveHandler.Save``1(``0)')
+[![Version](https://img.shields.io/nuget/v/FC.Extension.SQL.svg)](https://www.nuget.org/packages/FC.Extension.SQL/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Extension.SQL.svg)](https://www.nuget.org/packages/FC.Extension.SQL/)
 
-<a name='T-FC-Extension-SQL-Helper-BaseTrace'></a>
-## BaseTrace `type`
 
-##### Namespace
+✅ **Project status: active**.
 
-FC.Extension.SQL.Helper
+FC.Extension.SQL is a library which adds reduces the coding effort for the development team in terms of handling SQL Basic functionality. You may required literally a single line of code to handle DB Operation.
 
-##### Summary
+This library supports 
++ SQL Server
++ PostgreSQL 
++ MySQL Server
++ SQLite
 
-Trace class which captures traces in console, which can be extended to any trace implementation.
 
-<a name='T-FC-Extension-SQL-Engine-DeleteHandler'></a>
-## DeleteHandler `type`
+## Download
 
-##### Namespace
+- [NuGet](https://www.nuget.org/packages/FC.Extension.SQL/): Install-Package FC.Extension.SQL
 
-FC.Extension.SQL.Engine
+## Features
 
-##### Summary
+- Ready to use in the project as an extension
+- CRUD for SQL Server, PostgreSQL, MySQL, SQLite
+- You can pass Fluent Query to execute any Query
+- No Worry about the Language(SQL Server, SQLite/PostgreSQL/MySQL)
+- Uses SQLkata to receive as Fluent Query.
+- Targets .NET Core 3.1+
+- Dependent on RepoDB & SQLkata.
 
-Class that handles Delete operation
+## Usage
 
-<a name='M-FC-Extension-SQL-Engine-DeleteHandler-Delete``1-``0,System-Object-'></a>
-### Delete\`\`1(model,id) `method`
+### Quick start
+#### Step 1: Setup the Package
 
-##### Summary
+```csharp
+Install-Package FC.Extension.SQL
+```
 
-Delete the object
+#### Step 2:Initial Configuration
 
-##### Returns
+```csharp
+using FC.Extension.SQL.Helper;
+using FC.Extension.SQL.Engine;
+using SqlKata;
+..
 
-returns no of records that has been deleted
+SQLExtension.SQLConfig = new SQLConfig()
+	{
+	    Compiler = SQLCompiler.PostgreSQL,
+	    ConnectionString = "User Id=FCPos;Password=System@1234;Server=localhost;Port=5432;Database=ExtensionTest;",
+	    Trace = null
+	};
+	
+var personFake = new Faker<Person>()
+                 .RuleFor(o => o.Name, f => f.Person.FirstName)
+                 .RuleFor(o => o.Email, f => f.Person.Email);
+var person = personFake.Generate();
 
-##### Parameters
+````
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| model | [\`\`0](#T-``0 '``0') | Entity model object |
-| id | [System.Object](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Object 'System.Object') | An Unique id that will be deleted |
+#### Step 3:To Save
 
-##### Generic Types
+```csharp
+person = person.Save().Result;
+console.Output.WriteLine($"Saved Object : {person.ToJSON<Person>()}");
 
-| Name | Description |
-| ---- | ----------- |
-| T | Entity/Model Type |
+````
+#### Step 4:To Update
 
-<a name='T-FC-Extension-SQL-Engine-GetAllHandler'></a>
-## GetAllHandler `type`
+```csharp
+person.Id = GetIdEntry();
+person = person.Update().Result;
+console.Output.WriteLine($"Object Updated : {person.ToJSON<Person>()}");
 
-##### Namespace
+````
 
-FC.Extension.SQL.Engine
+#### Step 5:To Delete
 
-##### Summary
+```csharp
+person.Id = GetIdEntry();
+int records = 	person.Delete(person.Id).Result;
+console.Output.WriteLine($"Deleted. No of Records : {records}");
 
-A Class that gats all the data from the given model.
+````
 
-<a name='M-FC-Extension-SQL-Engine-GetAllHandler-GetAll``1-``0-'></a>
-### GetAll\`\`1(model) `method`
+#### Step 6:To Get Object by Id
 
-##### Summary
+```csharp
+person.Id = GetIdEntry();
+Person per = person.Get(person.Id).Result;
+console.Output.WriteLine($"Received Object : {per.ToJSON()}");
 
-A Get method that returns all the data from the given model. Use this for small table which is lesser then 1K Record.
+````
 
-##### Returns
+#### Step 7:To Get Object by Query
 
-returns all the model.
+```csharp
+int id = GetIdEntry();
+var personList = person.GetAny(new Query("Person").Where("Id", id)).Result;
 
-##### Parameters
+foreach (var model in personList)
+{
+    console.Output.WriteLine($"Queried Object : {model.ToJSON()}");
+}
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| model | [\`\`0](#T-``0 '``0') | Entity model object |
+````
 
-##### Generic Types
 
-| Name | Description |
-| ---- | ----------- |
-| T | Entity/Model Type |
 
-<a name='T-FC-Extension-SQL-Engine-GetAnyHandler'></a>
-## GetAnyHandler `type`
+> ⚠️ All Set. Use the same method for other extension methods.
+The full featured document available in the [Gitbook](https://app.gitbook.com/@sr-firecloud/s/fc-extension),
+ 
 
-##### Namespace
+## Other Extension
 
-FC.Extension.SQL.Engine
+- [AWS](https://www.nuget.org/packages/FC.Extension.AWS, "AWS Extension") 
+	* [![Version](https://img.shields.io/nuget/v/FC.Core.Extension.svg)](https://www.nuget.org/packages/FC.Core.Extension/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Core.Extension.svg)](https://www.nuget.org/packages/FC.Core.Extension/)
 
-##### Summary
+- [HTTP](https://www.nuget.org/packages/FC.Extension.HTTP/,"HTTP")
+	* [![Version](https://img.shields.io/nuget/v/FC.Extension.HTTP.svg)](https://www.nuget.org/packages/FC.Extension.HTTP/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Extension.HTTP.svg)](https://www.nuget.org/packages/FC.Extension.HTTP/)
 
-A Class that handles and executes any query and retrieves data
+- [RabbitMQ](https://www.nuget.org/packages/FC.Extension.RabbitMQ/,"RabbitMQ")
+	* [![Version](https://img.shields.io/nuget/v/FC.Extension.RabbitMQ.svg)](https://www.nuget.org/packages/FC.Extension.RabbitMQ/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Extension.RabbitMQ.svg)](https://www.nuget.org/packages/FC.Extension.RabbitMQ/)
 
-<a name='M-FC-Extension-SQL-Engine-GetAnyHandler-GetAny``1-``0,SqlKata-Query-'></a>
-### GetAny\`\`1(model,query) `method`
+- [Office](https://www.nuget.org/packages/FC.Extension.Office/,"Office")
+	* [![Version](https://img.shields.io/nuget/v/FC.Extension.Office.svg)](https://www.nuget.org/packages/FC.Extension.Office/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Extension.Office.svg)](https://www.nuget.org/packages/FC.Extension.Office/)
 
-##### Summary
+- [SQL](https://www.nuget.org/packages/FC.Extension.SQL/,"SQL")
+	* [![Version](https://img.shields.io/nuget/v/FC.Extension.SQL.svg)](https://www.nuget.org/packages/FC.Extension.SQL/)
+[![Downloads](https://img.shields.io/nuget/dt/FC.Extension.SQL.svg)](https://www.nuget.org/packages/FFC.Extension.SQL/)
 
-A Get method that returns data by a given query
-Ref:
-
-##### Returns
-
-returns the model based on the query.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| model | [\`\`0](#T-``0 '``0') | Entity model object |
-| query | [SqlKata.Query](#T-SqlKata-Query 'SqlKata.Query') | A query generated through SQLKata |
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| T | Entity/Model Type |
-
-<a name='T-FC-Extension-SQL-Engine-GetByIdHandler'></a>
-## GetByIdHandler `type`
-
-##### Namespace
-
-FC.Extension.SQL.Engine
-
-##### Summary
-
-A Class that handles Get Object
-
-<a name='M-FC-Extension-SQL-Engine-GetByIdHandler-Get``1-``0,System-Object-'></a>
-### Get\`\`1(model,id) `method`
-
-##### Summary
-
-A Get method returns the model data by Id
-
-##### Returns
-
-returns the model with the given id.
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| model | [\`\`0](#T-``0 '``0') | Entity model object |
-| id | [System.Object](http://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k:System.Object 'System.Object') | An Unique id that will be retrieve model |
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| T | Entity/Model Type |
-
-<a name='T-FC-Extension-SQL-MySQL-MySQLDataAccess`1'></a>
-## MySQLDataAccess\`1 `type`
-
-##### Namespace
-
-FC.Extension.SQL.MySQL
-
-##### Summary
-
-Use this class to access all the basic functions available in the MySQL
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| TModel | A Model/Entity type |
-
-<a name='T-FC-Extension-SQL-PostgreSQL-PostgreSQLDataAccess`1'></a>
-## PostgreSQLDataAccess\`1 `type`
-
-##### Namespace
-
-FC.Extension.SQL.PostgreSQL
-
-##### Summary
-
-Use this class to access all the basic functions available in the PostgreSQL
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| TModel | A Model/Entity type |
-
-<a name='T-FC-Extension-SQL-SQLServer-SQLiteDataAccess`1'></a>
-## SQLiteDataAccess\`1 `type`
-
-##### Namespace
-
-FC.Extension.SQL.SQLServer
-
-##### Summary
-
-Use this class to access all the basic functions available in the SQLite
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| TModel | A Model/Entity type |
-
-<a name='T-FC-Extension-SQL-SQLServer-SQServerDataAccess`1'></a>
-## SQServerDataAccess\`1 `type`
-
-##### Namespace
-
-FC.Extension.SQL.SQLServer
-
-##### Summary
-
-Use this class to access all the basic functions available in the SQL Server
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| TModel | A Model/Entity type |
-
-<a name='T-FC-Extension-SQL-Engine-SaveHandler'></a>
-## SaveHandler `type`
-
-##### Namespace
-
-FC.Extension.SQL.Engine
-
-##### Summary
-
-Class that handles Save operation
-
-<a name='M-FC-Extension-SQL-Engine-SaveHandler-Save``1-``0-'></a>
-### Save\`\`1(model) `method`
-
-##### Summary
-
-Saves the object
-
-##### Returns
-
-returns the model with saved data
-
-##### Parameters
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| model | [\`\`0](#T-``0 '``0') | Entity model object |
-
-##### Generic Types
-
-| Name | Description |
-| ---- | ----------- |
-| T | Entity/Model Type |
+>Complete

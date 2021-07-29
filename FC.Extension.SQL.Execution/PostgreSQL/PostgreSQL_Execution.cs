@@ -5,11 +5,14 @@ using CliFx.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FC.Core.Extension.StringHandlers;
 using FC.Extension.SQL;
 using FC.Extension.SQL.Helper;
 using FC.Extension.SQL.Engine;
+using SqlKata;
 
 namespace FC.Extension.SQL.Execution.PostgreSQL
 {
@@ -30,6 +33,11 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
 
         [CommandOption("GetById", 'i', Description = "Get a Person by Id")]
         public bool IsGetById { get; set; }
+
+        [CommandOption("Query", 'q', Description = "Execute the Query")]
+        public bool IsQuery { get; set; }
+
+
         public ValueTask ExecuteAsync(IConsole console)
         {
             var personFake = new Faker<Person>()
@@ -65,6 +73,17 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
                 Person per = person.Get(person.Id).Result;
                 console.Output.WriteLine($"Received Object : {per.ToJSON()}");
             }
+            else if (IsQuery)
+            {
+                int id = GetIdEntry();
+                var personList = person.GetAny(new Query("Person").Where("Id", id)).Result;
+
+                foreach (var model in personList)
+                {
+                    console.Output.WriteLine($"Queried Object : {model.ToJSON()}");
+                }
+
+            }
 
             return default;
         }
@@ -76,10 +95,11 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
         {
             Console.WriteLine("Enter Person unique Id :");
             int id = int.Parse(Console.ReadLine().ToString());
-            return id;  
+            return id;
         }
-    }
 
+        
+    }
 
     
 }
