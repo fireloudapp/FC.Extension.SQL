@@ -12,8 +12,6 @@ using MySql.Data.MySqlClient;
 
 namespace FC.Extension.SQL.MySQL
 {
-
-
     /// <summary>
     /// Use this class to access all the basic functions available in the MySQL
     /// </summary>

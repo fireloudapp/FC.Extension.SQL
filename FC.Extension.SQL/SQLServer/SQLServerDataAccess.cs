@@ -18,13 +18,13 @@ namespace FC.Extension.SQL.SQLServer
     /// Use this class to access all the basic functions available in the SQL Server
     /// </summary>
     /// <typeparam name="TModel">A Model/Entity type</typeparam>
-    public class SQServerDataAccess<TModel> : IBaseAccess<TModel> where TModel : class
+    public class SQLServerDataAccess<TModel> : IBaseAccess<TModel> where TModel : class
     {
         string _conString = string.Empty;
         BaseTrace _baseTrace = null;
         SqlServerCompiler _sqlServerCompiler;
         #region Constructor
-        public SQServerDataAccess(string connectionString, BaseTrace baseTrace = null)
+        public SQLServerDataAccess(string connectionString, BaseTrace baseTrace = null)
         {
             _conString = connectionString;
             _baseTrace = baseTrace;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace FC.Extension.SQL.Engine
 {
     /// <summary>
-    /// A Class that gats all the data from the given model.
+    /// A Class that gets all the data from the given model.
     /// </summary>
     public static class GetAllHandler
     {
