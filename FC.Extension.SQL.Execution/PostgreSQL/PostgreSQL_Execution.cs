@@ -2,17 +2,12 @@
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 using FC.Core.Extension.StringHandlers;
-using FC.Extension.SQL;
-using FC.Extension.SQL.Helper;
 using FC.Extension.SQL.Engine;
+using FC.Extension.SQL.Helper;
 using SqlKata;
+using System;
+using System.Threading.Tasks;
 
 namespace FC.Extension.SQL.Execution.PostgreSQL
 {
@@ -37,6 +32,8 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
         [CommandOption("Query", 'q', Description = "Execute the Query")]
         public bool IsQuery { get; set; }
 
+        [CommandOption("Count", 'c', Description = "Get the Record count")]
+        public bool IsGetCount { get; set; }
 
         public ValueTask ExecuteAsync(IConsole console)
         {
@@ -84,6 +81,11 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
                 }
 
             }
+            else if (IsGetCount)
+            {
+                var personCount = person.GetCount().Result;
+                console.Output.WriteLine($"Total Records : {personCount}");
+            }
 
             return default;
         }
@@ -98,8 +100,8 @@ namespace FC.Extension.SQL.Execution.PostgreSQL
             return id;
         }
 
-        
+
     }
 
-    
+
 }

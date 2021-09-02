@@ -108,7 +108,12 @@ foreach (var model in personList)
 
 ````
 
+#### Step 8:To Get Record Count
 
+```csharp
+var personCount = person.GetCount().Result;
+console.Output.WriteLine($"Total Records : {personCount}");
+````
 
 > ⚠️ All Set. Use the same method for other extension methods.
 The full featured document available in the [Gitbook](https://app.gitbook.com/@sr-firecloud/s/fc-extension),
