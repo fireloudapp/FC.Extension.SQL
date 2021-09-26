@@ -317,5 +317,59 @@ namespace FC.Extension.SQL.SQLServer
             return noOfRecords;
         }
         #endregion
+
+        #region IDangerExecution Implementation
+
+        public async Task<long> TruncateAsync()
+        {
+            long noOfRecords = 0;
+            using (var connection = new SQLiteConnection(_conString))
+            {
+                noOfRecords = await connection.TruncateAsync<TModel>();
+            }
+            return noOfRecords;
+        }
+
+        public int DeleteAll()
+        {
+            int noOfRowsDeleted = 0;
+            using (var connection = new SQLiteConnection(_conString))
+            {
+                noOfRowsDeleted = connection.DeleteAll<TModel>();
+            }
+            return noOfRowsDeleted;
+        }
+
+        public int Truncate()
+        {
+            int noOfRowsTruncated = 0;
+            using (var connection = new SQLiteConnection(_conString))
+            {
+                noOfRowsTruncated = connection.Truncate<TModel>();
+            }
+            return noOfRowsTruncated;
+        }
+
+        public bool CreteTable(string sqlQuery)
+        {
+            return ExecuteSQLQuery(sqlQuery);
+        }
+
+        public bool DeleteTable(string sqlQuery)
+        {
+            return ExecuteSQLQuery(sqlQuery);
+        }
+
+        private bool ExecuteSQLQuery(string sqlQuery)
+        {
+            bool result = false;
+            using (var connection = new SQLiteConnection(_conString))
+            {
+                var value = connection.ExecuteNonQuery(sqlQuery);
+                result = true;
+            }
+            return result;
+        }
+        #endregion
     }
 }

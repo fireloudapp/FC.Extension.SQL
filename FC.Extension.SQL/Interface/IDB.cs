@@ -35,14 +35,17 @@ namespace FC.Extension.SQL.Interface
         public long GetRecordCount();
         public Task<long> GetRecordCountAsync();
 
-    }
-
-    public interface IDangerExecution<TModel> where TModel : class
-    {
         public int Truncate();
+        public Task<long> TruncateAsync();
         public int DeleteAll();
 
         public bool CreteTable(string sqlQuery);
         public bool DeleteTable(string sqlQuery);
+
     }
+
+    //public interface IDangerExecution<TModel> where TModel : class
+    //{
+
+    //}
 }
