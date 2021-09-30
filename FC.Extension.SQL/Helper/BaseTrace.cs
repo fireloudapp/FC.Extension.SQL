@@ -11,6 +11,7 @@ namespace FC.Extension.SQL.Helper
     /// </summary>
     public class BaseTrace : ITrace
     {
+        #region After Query Execution
         public void AfterAverage(TraceLog log)
         {
 
@@ -143,13 +144,17 @@ namespace FC.Extension.SQL.Helper
 
         public void AfterUpdate(TraceLog log)
         {
-
+            Console.WriteLine($"AfterUpdate: {log.Statement}, TotalTime: {log.ExecutionTime.TotalSeconds} second(s)");
         }
 
         public void AfterUpdateAll(TraceLog log)
         {
 
         }
+
+        #endregion
+
+        #region Before Execution
 
         public void BeforeAverage(CancellableTraceLog log)
         {
@@ -258,7 +263,7 @@ namespace FC.Extension.SQL.Helper
 
         public void BeforeQueryAll(CancellableTraceLog log)
         {
-
+            Console.WriteLine($"BeforeQueryAll: {log.Statement}, TotalTime: {log.ExecutionTime.TotalSeconds} second(s)");
         }
 
         public virtual void BeforeQueryMultiple(CancellableTraceLog log)
@@ -290,5 +295,6 @@ namespace FC.Extension.SQL.Helper
         {
 
         }
+        #endregion
     }
 }

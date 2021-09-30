@@ -15,7 +15,7 @@
 		<DocumentationMarkdown>$(OutDir)\FC.Extension.SQL.md</DocumentationMarkdown>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<AssemblyVersion>1.0.0.1</AssemblyVersion>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
