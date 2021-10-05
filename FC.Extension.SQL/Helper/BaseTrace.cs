@@ -114,7 +114,7 @@ namespace FC.Extension.SQL.Helper
 
         public void AfterQuery(TraceLog log)
         {
-
+            Console.WriteLine($"AfterQuery: {log.Statement}, TotalTime: {log.ExecutionTime.TotalSeconds} second(s)");
         }
 
         public void AfterQueryAll(TraceLog log)
@@ -198,7 +198,7 @@ namespace FC.Extension.SQL.Helper
 
         public void BeforeExecuteQuery(CancellableTraceLog log)
         {
-
+            Console.WriteLine($"BeforeExecuteQuery: {log.Statement}, TotalTime: {log.ExecutionTime.TotalSeconds} second(s)");
         }
 
         public void BeforeExecuteReader(CancellableTraceLog log)
@@ -258,7 +258,7 @@ namespace FC.Extension.SQL.Helper
 
         public void BeforeQuery(CancellableTraceLog log)
         {
-
+            Console.WriteLine($"BeforeQuery: {log.Statement}, TotalTime: {log.ExecutionTime.TotalSeconds} second(s)");
         }
 
         public void BeforeQueryAll(CancellableTraceLog log)
