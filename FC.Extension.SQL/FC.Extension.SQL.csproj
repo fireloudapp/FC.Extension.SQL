@@ -14,8 +14,9 @@
 	<PropertyGroup>
 		<DocumentationMarkdown>$(OutDir)\FC.Extension.SQL.md</DocumentationMarkdown>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<AssemblyVersion>1.0.0.1</AssemblyVersion>
-		<Version>1.0.2</Version>
+		<AssemblyVersion>1.0.3.0</AssemblyVersion>
+		<Version>1.0.3</Version>
+		<FileVersion>1.0.3</FileVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

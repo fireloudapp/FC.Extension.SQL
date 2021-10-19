@@ -20,7 +20,7 @@ namespace FC.Extension.SQL.PostgreSQL
     {
         string _conString = string.Empty;
         BaseTrace _baseTrace = null;
-        PostgresCompiler _postgresCompiler;
+        public PostgresCompiler _postgresCompiler;
         #region Constructor
         public PostgreSQLDataAccess(string connectionString, BaseTrace baseTrace = null)
         {
