@@ -22,10 +22,17 @@ namespace FC.Extension.SQL.Engine
         {
             T? entity = null;
             if (SQLExtension.SQLConfig == null) return model;
-
-            IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
-            entity = await baseAccess.CreateAsync(model);
-
+            
+            if (SQLExtension.SQLConfig.DBType == DBType.SQL)
+            {
+                IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
+                entity = await baseAccess.CreateAsync(model);
+            }
+            else
+            {
+                INoSQLBaseAccess<T> baseAccess = SQLExtension.GetNoSQLCompiler<T>();
+                entity = await baseAccess.CreateAsync(model);
+            }
             return entity;
         }
    }

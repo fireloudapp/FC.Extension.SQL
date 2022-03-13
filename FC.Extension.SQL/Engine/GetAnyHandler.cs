@@ -2,8 +2,10 @@
 using SqlKata;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using FC.Extension.SQL.Helper;
 
 namespace FC.Extension.SQL.Engine
 {
@@ -25,10 +27,27 @@ namespace FC.Extension.SQL.Engine
             IEnumerable<T> modelList = null;
             if (SQLExtension.SQLConfig == null) return null;
 
-            IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
-            modelList = await baseAccess.ExecuteQuery(query);
+            if (SQLExtension.SQLConfig.DBType == DBType.SQL)
+            {
+                IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
+                modelList = await baseAccess.ExecuteQuery(query);
+            }
 
             return modelList;
         }
+        public static async Task<IEnumerable<T>> GetAny<T>(this T model, Expression<Func<T, bool>> filter) where T : class
+        {
+            IEnumerable<T> modelList = null;
+            if (SQLExtension.SQLConfig == null) return null;
+
+            if (SQLExtension.SQLConfig.DBType == DBType.NoSQL)
+            {
+                INoSQLBaseAccess<T> baseAccess = SQLExtension.GetNoSQLCompiler<T>();
+                modelList = await baseAccess.GetAnyAsync(filter);
+            }
+
+            return modelList;
+        }
+        
     }
 }

@@ -3,6 +3,8 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using System;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace FC.Extension.SQL.Execution
 {
@@ -22,6 +24,15 @@ namespace FC.Extension.SQL.Execution
         public string Name { get; set; }
         public string Email { get; set; }
     }
+    public class PersonMongo
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
+    
 
     [Command("HellowWorld")]
     public class HelloWorldCommand : ICommand

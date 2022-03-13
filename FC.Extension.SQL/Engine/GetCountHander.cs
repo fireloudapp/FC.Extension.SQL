@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using FC.Extension.SQL.Helper;
 
 namespace FC.Extension.SQL.Engine
 {
@@ -22,8 +23,17 @@ namespace FC.Extension.SQL.Engine
             long count = 0;
             if (SQLExtension.SQLConfig == null) return 0;
 
-            IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
-            count = await baseAccess.GetRecordCountAsync();
+            if (SQLExtension.SQLConfig.DBType == DBType.SQL)
+            {
+                IBaseAccess<T> baseAccess = SQLExtension.GetCompiler<T>();
+                count = await baseAccess.GetRecordCountAsync();
+            }
+            else if (SQLExtension.SQLConfig.DBType == DBType.NoSQL)
+            {
+                INoSQLBaseAccess<T> baseAccess = SQLExtension.GetNoSQLCompiler<T>();
+                count = await baseAccess.GetRecordCountAsync();
+            }
+            
 
             return count;
         }
