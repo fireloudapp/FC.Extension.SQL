@@ -14,6 +14,7 @@ This library supports
 + PostgreSQL 
 + MySQL Server
 + SQLite
++ MongoDB
 
 
 ## Download
