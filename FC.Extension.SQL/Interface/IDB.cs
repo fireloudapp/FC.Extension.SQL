@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FC.Extension.SQL.Interface
@@ -79,6 +80,14 @@ namespace FC.Extension.SQL.Interface
 
     public interface INoSQLBaseAccess<TModel> where TModel : class
     {
+        #region Property
+        /// <summary>
+        /// Used for customized or generic way of handling model objects.
+        /// </summary>
+        IMongoCollection<BsonDocument> GenericCollection { get; }
+        
+
+        #endregion
         #region Basic CRUD
         public TModel Create(TModel model);
         public Task<TModel> CreateAsync(TModel model);

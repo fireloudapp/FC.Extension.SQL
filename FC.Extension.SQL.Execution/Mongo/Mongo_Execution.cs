@@ -5,12 +5,14 @@ using CliFx.Infrastructure;
 using FC.Core.Extension.StringHandlers;
 using FC.Extension.SQL.Engine;
 using FC.Extension.SQL.Helper;
-using SqlKata;
 using System;
 using System.Threading.Tasks;
 using FC.Extension.SQL.Interface;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+
+
 
 namespace FC.Extension.SQL.Execution.Mongo
 {
@@ -43,6 +45,9 @@ namespace FC.Extension.SQL.Execution.Mongo
         
         [CommandOption("Pagination", 'p', Description = "Get person data by Page")]
         public bool IsPaged { get; set; }
+        
+        [CommandOption("Generic", 'e', Description = "Generic Object filter and testing")]
+        public bool IsGeneric { get; set; }
 
         public ValueTask ExecuteAsync(IConsole console)
         {
@@ -114,6 +119,27 @@ namespace FC.Extension.SQL.Execution.Mongo
                 foreach (var model in personList)
                 {
                     console.Output.WriteLine($"Queried Object : {model.ToJSON()}");
+                }
+            }
+            else if (IsGeneric)
+            {
+                INoSQLBaseAccess<PersonMongo> baseAccess = SQLExtension.GetNoSQLCompiler<PersonMongo>();
+                //Full object get: Ref: https://docs.mongodb.com/manual/tutorial/query-documents/
+                var filter = Builders<BsonDocument>.Filter.Empty; //No filter applied.
+                var result = baseAccess.GenericCollection.Find(filter).ToList();
+                foreach (var model in result)
+                {
+                    console.Output.WriteLine($"No Filter Queried Object : {model.ToJSON()}");
+                }
+                
+                //Filter object get
+                string id = GetIdEntry();
+                filter = Builders<BsonDocument>.Filter.Eq("_id",ObjectId.Parse(id));
+                result = baseAccess.GenericCollection.Find(filter).ToList();
+                console.Output.WriteLine($"Result : { result.Count}");
+                foreach (var model in result)
+                {
+                    console.Output.WriteLine($"Filtered Query Object : {model.ToJSON()}");
                 }
             }
             
