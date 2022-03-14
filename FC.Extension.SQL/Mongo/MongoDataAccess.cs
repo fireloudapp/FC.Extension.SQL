@@ -8,9 +8,10 @@ using FC.Extension.SQL.Interface;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using RepoDb;
-using SqlKata;
-using SqlKata.Compilers;
+//using SqlKata;
+//using SqlKata.Compilers;
 
 namespace FC.Extension.SQL.Mongo
 {
@@ -18,7 +19,21 @@ namespace FC.Extension.SQL.Mongo
     {
         BaseTrace _baseTrace = null;
         private readonly IMongoCollection<TModel> _modelCollection;
-        //private readonly IMongoCollection<PersonMongo> _pCollection;
+
+        private readonly IMongoCollection<BsonDocument> _genericCollection;
+
+        #region Property
+
+        /// <summary>
+        /// Used for customized or generic way of handling model objects.
+        /// </summary>
+        public IMongoCollection<BsonDocument> GenericCollection
+        {
+            get;
+        }
+
+
+        #endregion
         
         #region Constructor
         //Ref:https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-6.0&tabs=visual-studio#add-an-entity-model
@@ -30,9 +45,8 @@ namespace FC.Extension.SQL.Mongo
             var mongoClient = new MongoClient(settings);
             var mongoDatabase = mongoClient.GetDatabase(sqlConfig.DataBaseName);
             _modelCollection = mongoDatabase.GetCollection<TModel>(sqlConfig.CollectionName);
-            //_pCollection = mongoDatabase.GetCollection<PersonMongo>(sqlConfig.CollectionName);
-            //string value = "123564";
-            //_pCollection.ReplaceOneAsync(per => per.Id == value, new PersonMongo());
+            _genericCollection = mongoDatabase.GetCollection<BsonDocument>(sqlConfig.CollectionName);
+            GenericCollection = _genericCollection;
         }
         #endregion
 
@@ -72,11 +86,15 @@ namespace FC.Extension.SQL.Mongo
         {
             return await _modelCollection.Find(filter).ToListAsync();
         }
-        
+        /// <summary>
+        /// Get all data from the table so called as documents. In general use it for small tables and not for larger tables.
+        /// </summary>
+        /// <returns>list of model data, without any filter.</returns>
         public async Task<IEnumerable<TModel>> GetAllAsync()
         {
             return await _modelCollection.Find(_ => true).ToListAsync();
         }
+
 
         #endregion
 
