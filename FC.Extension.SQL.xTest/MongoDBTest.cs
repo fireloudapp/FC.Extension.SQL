@@ -1,3 +1,4 @@
+using Bogus;
 using FC.Core.Extension.StringHandlers;
 using FC.Extension.SQL.Engine;
 using FC.Extension.SQL.Helper;
@@ -33,6 +34,17 @@ public class MongoDBTest
         {
             _output.WriteLine($"Queried Object : {model.ToJSON()}");
         }
+    }
+    
+    [Fact]
+    public void Save_Test()
+    {
+        var personFake = new Faker<PersonMongo>()
+            .RuleFor(o => o.Name, f => f.Person.FirstName)
+            .RuleFor(o => o.Email, f => f.Person.Email);
+        var person = personFake.Generate();
+        person = person.Save().Result;
+        _output.WriteLine($"Saved Object : {person.ToJSON<PersonMongo>()}");
     }
     
 }

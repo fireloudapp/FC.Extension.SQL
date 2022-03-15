@@ -44,8 +44,8 @@ namespace FC.Extension.SQL.Mongo
             settings.ServerApi = new ServerApi(ServerApiVersion.V1);
             var mongoClient = new MongoClient(settings);
             var mongoDatabase = mongoClient.GetDatabase(sqlConfig.DataBaseName);
-            _modelCollection = mongoDatabase.GetCollection<TModel>(sqlConfig.CollectionName);
-            _genericCollection = mongoDatabase.GetCollection<BsonDocument>(sqlConfig.CollectionName);
+            _modelCollection = mongoDatabase.GetCollection<TModel>(  typeof(TModel).Name);
+            _genericCollection = mongoDatabase.GetCollection<BsonDocument>(typeof(TModel).Name);
             GenericCollection = _genericCollection;
         }
         #endregion
