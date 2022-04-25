@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FC.Extension.SQL.Helper;
 using FC.Extension.SQL.Interface;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -19,11 +20,9 @@ namespace FC.Extension.SQL.Mongo
     {
         BaseTrace _baseTrace = null;
         private readonly IMongoCollection<TModel> _modelCollection;
-
         private readonly IMongoCollection<BsonDocument> _genericCollection;
-
+        
         #region Property
-
         /// <summary>
         /// Used for customized or generic way of handling model objects.
         /// </summary>
@@ -31,8 +30,6 @@ namespace FC.Extension.SQL.Mongo
         {
             get;
         }
-
-
         #endregion
         
         #region Constructor
@@ -125,6 +122,33 @@ namespace FC.Extension.SQL.Mongo
             var result  = await query .Skip(page).Limit(rowsPerBatch).ToListAsync();
             result = result.OrderBy(orderBy).ToList();
             return result;
+        }
+        
+        /// <summary>
+        /// Filter by regular expression
+        /// </summary>
+        /// <param name="rejexSearch">rejex filter value eg.Ref: https://www.thecodebuzz.com/mongodb-csharp-driver-like-query-examples/</param>
+        /// <param name="page">which page you want to look</param>
+        /// <param name="rowsPerBatch">How many records you need</param>
+        /// <typeparam name="TField">Model type</typeparam>
+        /// <returns>A List of Objects</returns>
+        /// <example>
+        /// var queryExpr = new BsonRegularExpression(new Regex(searchName, RegexOptions.IgnoreCase));
+        /// var builder = Builders<BsonDocument>.Filter;
+        /// FilterDefinition<BsonDocument> filter = builder.Regex("Name", queryExpr);
+        /// var query = BaseAccess.GenericCollection.Find(filter);
+        /// var result  = await query .Skip(page).Limit(rows).ToListAsync ();
+        /// var countryList = result.Select(obj => BsonSerializer.Deserialize<TModel>(obj)).ToList();
+        ///     return countryList;
+        /// </example>
+        public async Task<IEnumerable<TModel>> SearchByField<TField>
+        (FilterDefinition<BsonDocument> rejexSearch ,  int page = 0,
+            int rowsPerBatch = 10) where TField : class
+        {
+            var query = _genericCollection.Find(rejexSearch);
+            var result  = await query .Skip(page).Limit(rowsPerBatch).ToListAsync();
+            var modelList = result.Select(obj => BsonSerializer.Deserialize<TModel>(obj)).ToList();
+            return modelList;
         }
         #endregion
     }
