@@ -86,6 +86,15 @@ namespace FC.Extension.SQL.Interface
         /// </summary>
         IMongoCollection<BsonDocument> GenericCollection { get; }
         
+        /// <summary>
+        /// Used to handle model collection for custom query
+        /// </summary>
+        public IMongoCollection<TModel> ModelCollection
+        {
+            get;
+            set;
+        }
+        
 
         #endregion
         #region Basic CRUD
