@@ -30,10 +30,16 @@ namespace FC.Extension.SQL.Mongo
         {
             get;
         }
+
         /// <summary>
         /// Used to handle model collection for custom query
         /// </summary>
-        public IMongoCollection<TModel> ModelCollection => _modelCollection;
+        public IMongoCollection<TModel> ModelCollection
+        {
+            get;
+            set;
+        }
+    
 
         #endregion
         
@@ -47,8 +53,10 @@ namespace FC.Extension.SQL.Mongo
             var mongoClient = new MongoClient(settings);
             var mongoDatabase = mongoClient.GetDatabase(sqlConfig.DataBaseName);
             _modelCollection = mongoDatabase.GetCollection<TModel>(  typeof(TModel).Name);
+            ModelCollection = _modelCollection;
             _genericCollection = mongoDatabase.GetCollection<BsonDocument>(typeof(TModel).Name);
             GenericCollection = _genericCollection;
+            
         }
         #endregion
 
