@@ -30,6 +30,11 @@ namespace FC.Extension.SQL.Mongo
         {
             get;
         }
+        /// <summary>
+        /// Used to handle model collection for custom query
+        /// </summary>
+        public IMongoCollection<TModel> ModelCollection => _modelCollection;
+
         #endregion
         
         #region Constructor
