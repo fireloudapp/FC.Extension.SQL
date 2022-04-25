@@ -116,6 +116,9 @@ namespace FC.Extension.SQL.Interface
         (Func<TModel, TField> orderBy, Expression<Func<TModel, bool>> filter, int page = 0,
             int rowsPerBatch = 10) where TField : class;
 
+        public Task<IEnumerable<TModel>> SearchByField<TField>
+        (FilterDefinition<BsonDocument> rejexSearch ,  int page = 0,
+            int rowsPerBatch = 10) where TField : class;
 
         #endregion
 
